@@ -25,9 +25,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
 
-import java.io.File;
 import java.util.HashMap;
 
 import io.reactivex.subjects.PublishSubject;
@@ -37,6 +35,8 @@ import io.reactivex.subjects.PublishSubject;
  */
 
 public class RxPictureFragment extends Fragment {
+
+    private static final String TAG = "RxPictureFragment";
 
     public static final String TAKE_PICTURE = "take_picture";
     public static final String SELECT_FROM_ALBUM = "select_from_album";
@@ -63,25 +63,19 @@ public class RxPictureFragment extends Fragment {
         setRetainInstance(true);
     }
 
-
     /**
      * 拍照。
      *
      * @return 文件路径。
      */
-    public String takePicture(String authority) {
-        File file = new File(getActivity().getFilesDir(), "/temp/"
-                + System.currentTimeMillis() + ".jpg");
-        if (!file.getParentFile().exists()) {
-            file.getParentFile().mkdirs();
-        }
-        Uri imageUri = FileProvider.getUriForFile(getActivity(), authority, file);
+    public void takePicture(PictureInfoFactory factory) {
+
+        PictureInfo pictureInfo = factory.generatePictureInfo();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, pictureInfo.getUri());
         startActivityForResult(intent, TAKE_PICTURE_CODE);
-        tempTakePicturePath = file.getAbsolutePath();
-        return file.getAbsolutePath();
+        tempTakePicturePath = pictureInfo.getPath();
     }
 
 
@@ -98,7 +92,8 @@ public class RxPictureFragment extends Fragment {
     public void getImagePathFromAlbumData(Intent data, PublishSubject<String> subject) {
         Uri uri = data.getData();
         if (uri == null) {
-            subject.onError(new RuntimeException("获得的data为null"));
+            subject.onError(new PictureSelectException(PictureSelectException.SELECT_FROM_ALBUM_NO_DATA,
+                    "从相册获取的data为空"));
             return;
         }
         if (uri.getScheme().equals("file")) {
@@ -120,9 +115,7 @@ public class RxPictureFragment extends Fragment {
                     subject.onComplete();
                 }
             } finally {
-                if (null != cursor) {
-                    cursor.close();
-                }
+                close(cursor);
             }
         }
 
@@ -144,7 +137,8 @@ public class RxPictureFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK) {
             getImagePathFromAlbumData(data, subject);
         } else {
-            subject.onError(new RuntimeException("拍照失败了"));
+            subject.onError(new PictureSelectException(PictureSelectException.SELECT_FROM_ALBUM_FAIL,
+                    "选择相册失败了"));
         }
     }
 
@@ -155,7 +149,8 @@ public class RxPictureFragment extends Fragment {
             subject.onNext(tempTakePicturePath);
             subject.onComplete();
         } else {
-            subject.onError(new RuntimeException("拍照失败了"));
+            subject.onError(new PictureSelectException(PictureSelectException.TAKE_PICTURE_FAIL,
+                    "拍照失败了"));
         }
     }
 
@@ -175,4 +170,11 @@ public class RxPictureFragment extends Fragment {
         }
         return subject;
     }
+
+    private void close(Cursor cursor) {
+        if (null != cursor) {
+            cursor.close();
+        }
+    }
+
 }

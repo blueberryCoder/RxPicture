@@ -36,12 +36,13 @@ public class RxPicture {
     static final String FRAGMENT_TAG = "RxPictureFragmentTag";
     static final Object TRIGGER = new Object();
 
-    public String fileProvideAuthority = "com.blueberry.picture.fileprovider";
-
     private RxPictureFragment mRxPictureFragment;
+
+    private PictureInfoFactory mPictureInfoFactory;
 
     public RxPicture(AppCompatActivity appCompatActivity) {
         this.mRxPictureFragment = getRxPictureFragment(appCompatActivity);
+        this.mPictureInfoFactory = new DefaultPictureInfoFactoryImpl(appCompatActivity);
     }
 
     private RxPictureFragment getRxPictureFragment(AppCompatActivity appCompatActivity) {
@@ -63,14 +64,15 @@ public class RxPicture {
     }
 
     /**
-     * 设置FileProviderAuthority.
+     * 设置自定义的PictureInfoFactory,用来管理拍照时图片的存储。
      *
-     * @param fileProvideAuthority
+     * @param factory
+     * @return
      */
-    public void setFileProvideAuthority(String fileProvideAuthority) {
-        this.fileProvideAuthority = fileProvideAuthority;
+    public RxPicture setPictureInfoFactory(PictureInfoFactory factory) {
+        this.mPictureInfoFactory = factory;
+        return this;
     }
-
 
     /**
      * 请求拍照
@@ -130,7 +132,6 @@ public class RxPicture {
         };
     }
 
-
     private Observable<String> takePicture() {
         PublishSubject<String> subject
                 = mRxPictureFragment.getSubjectByKey(RxPictureFragment.TAKE_PICTURE);
@@ -139,7 +140,7 @@ public class RxPicture {
             mRxPictureFragment.setSubject(RxPictureFragment.TAKE_PICTURE, subject);
         }
 
-        mRxPictureFragment.takePicture(fileProvideAuthority);
+        mRxPictureFragment.takePicture(mPictureInfoFactory);
         return subject;
     }
 

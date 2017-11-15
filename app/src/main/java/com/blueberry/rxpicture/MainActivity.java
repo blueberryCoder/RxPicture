@@ -16,14 +16,20 @@
 
 package com.blueberry.rxpicture;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.blueberry.picture.PictureInfo;
+import com.blueberry.picture.PictureInfoFactory;
 import com.blueberry.picture.RxPicture;
 import com.bumptech.glide.Glide;
+
+import java.io.File;
 
 import io.reactivex.functions.Consumer;
 
@@ -40,6 +46,23 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //
                 new RxPicture(MainActivity.this)
+                        .setPictureInfoFactory(new PictureInfoFactory() {
+                            @Override
+                            public PictureInfo generatePictureInfo() {
+                                File file = new File(MainActivity.this.getFilesDir(),
+                                        "/temp1/" + System.currentTimeMillis() + ".jpg");
+                                if (!file.getParentFile().exists()) {
+                                    file.getParentFile().mkdirs();
+                                }
+                                Uri imageUri = FileProvider
+                                        .getUriForFile(MainActivity.this,
+                                                "com.blueberry.rxpicture.customer.fileprovider", file);
+                                PictureInfo pictureInfo = new PictureInfo();
+                                pictureInfo.setUri(imageUri);
+                                pictureInfo.setPath(file.getAbsolutePath());
+                                return pictureInfo;
+                            }
+                        })
                         .requestTakePicture()
                         .subscribe(new Consumer<String>() {
                             @Override
