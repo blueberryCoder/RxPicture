@@ -16,7 +16,8 @@ android {
 dependencies {
     def appDependencies = rootProject.ext.appDependencies
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':rxpicture')
+//    implementation project(':rxpicture')
+    implementation 'com.blueberry:rxpicture:0.1.0'
     implementation appDependencies.appcompat
     implementation appDependencies.glide
     implementation appDependencies.rxJava

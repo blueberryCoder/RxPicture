@@ -134,7 +134,7 @@ public class DefaultPictureInfoFactoryImpl implements PictureInfoFactory {
                                 }
                                 Uri imageUri = FileProvider
                                         .getUriForFile(MainActivity.this,
-                                                "com.blueberry.rxpicture.customer.fileprovider", file);
+                                                "com.blueberry.sample.customer.fileprovider", file);
                                 PictureInfo pictureInfo = new PictureInfo();
                                 pictureInfo.setUri(imageUri);
                                 pictureInfo.setPath(file.getAbsolutePath());
