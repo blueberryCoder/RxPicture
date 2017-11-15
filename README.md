@@ -7,12 +7,17 @@
 
 ```groovy
    
-   api 'com.blueberry:rxpicture:0.1.0'
+   implementation 'com.blueberry:rxpicture:0.1.0'
    
 ```
-在Module的`build.gradle`文件中的`dependencies{}`中加入一下代码
+这个工具依赖`Rxjava2`和`AppCompat`包，所有你还需要同时引入
 
-这个工具依赖了RxJava2,如果自己的项目也已经引入了RxJava2可以使用implementation代替api
+```groovy
+
+   implementation "io.reactivex.rxjava2:rxjava:${rxJavaVersion}"
+   implementation "com.android.support:appcompat-v7:${appcompatVersion}"
+
+```
 
 ### 从相册中选择图片
 
