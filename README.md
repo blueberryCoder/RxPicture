@@ -1,5 +1,5 @@
 # 图片选取工具
-
+[ ![Download](https://api.bintray.com/packages/blueberrycoder/maven/rtmplive/images/download.svg) ](https://bintray.com/blueberrycoder/maven/rtmplive/_latestVersion)
 
 ## 使用方法
 
