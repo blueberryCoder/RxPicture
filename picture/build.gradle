@@ -1,0 +1,31 @@
+apply plugin: 'com.android.library'
+apply from :'../buildsystem/app.gradle'
+android {
+
+    defaultConfig {
+        applicationId null
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+//println "${rootProject.ext.supportVersion}"
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    def libraryDependencies = rootProject.ext.libraryDependencies
+
+    implementation libraryDependencies.appcompat
+    implementation libraryDependencies.rxJava
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+}
