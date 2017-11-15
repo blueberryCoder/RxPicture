@@ -1,0 +1,59 @@
+apply plugin: 'com.android.library'
+apply from :'../buildsystem/app.gradle'
+apply plugin: 'com.novoda.bintray-release'
+
+android {
+
+    defaultConfig {
+        applicationId null
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs 'src/main/java'
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            res.srcDirs 'src/main/res'
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    def libraryDependencies = rootProject.ext.libraryDependencies
+
+    implementation libraryDependencies.appcompat
+    implementation libraryDependencies.rxJava
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+}
+
+publish {
+    userOrg = 'blueberrycoder'
+    groupId = 'com.blueberry'
+    artifactId = 'rxpicture'
+    publishVersion = android.defaultConfig.versionName //版本号
+    desc = 'this is a android library . '
+    website = 'https://github.com/blueberryCoder/RxPicture'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    failOnError false
+}
+
+

@@ -16,7 +16,7 @@ android {
 dependencies {
     def appDependencies = rootProject.ext.appDependencies
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':picture')
+    implementation project(':rxpicture')
     implementation appDependencies.appcompat
     implementation appDependencies.glide
     implementation appDependencies.rxJava
