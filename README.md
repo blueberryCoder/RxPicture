@@ -46,6 +46,8 @@
 
 ### 自定义FileProvider
 
+如果你只是想简单的使用，不想那么麻烦，你就直接使用上面的代码就可以了，如果你想自己来实现以下FileProvider请继续看。
+
 拍照我默认写了一个FileProvider,并写了默认的`PictureInfoFactory`的实现类`DefaultPictureInfoFactoryImpl`
 
 ```xml
