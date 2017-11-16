@@ -28,7 +28,7 @@ import java.io.File;
 
 public class DefaultPictureInfoFactoryImpl implements PictureInfoFactory {
 
-    public String fileProvideAuthority = "com.blueberry.picture.fileprovider";
+    public String fileProvideAuthority = "com.blueberry.rxpicture.fileprovider";
 
     public Context mContext;
 

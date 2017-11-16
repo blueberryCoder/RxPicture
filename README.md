@@ -7,7 +7,7 @@
 
 ```groovy
    
-   implementation 'com.blueberry:rxpicture:0.1.0'
+   implementation 'com.blueberry:rxpicture:0.1.1'
    
 ```
 这个工具依赖`Rxjava2`和`AppCompat`包，所有你还需要同时引入
