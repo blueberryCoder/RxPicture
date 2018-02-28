@@ -32,7 +32,6 @@ import com.bumptech.glide.Glide;
 import java.io.File;
 
 import io.reactivex.functions.Consumer;
-
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
